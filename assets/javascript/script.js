@@ -11,6 +11,8 @@ var userLocationInfo = {
   longitude: "",
 
 };
+
+var googleAPIkey = "AIzaSyDyl44m8YtRpjGj7OvGDc0XzLWRbxnc17w"
 var itemArray = [""];
 
 var macyItemResult = "";
@@ -101,35 +103,60 @@ var bestBuyitemURL = {
 
  });
   
-  
+ $("#zip-code-btn").on("click", function(event){
+  event.preventDefault();
+
+  var zip = $("#zip-code").val().trim();
+  userLocationInfo.zip = zip;
+  console.log(zip);
+  var queryURL =
+  "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+  userLocationInfo.zip +
+  "&key=" +
+  googleAPIkey;
+
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  })
+    // After the data comes back from the API
+    .then(function(response) {
+      console.log(response);
+      // Storing an array of results in the results variable
+      userLocationInfo.latitude = response.results[0].geometry.location.lat;
+      console.log(userLocationInfo.latitude);
+      userLocationInfo.longitude = response.results[0].geometry.location.lng;
+      console.log(userLocationInfo.longitude);
+  });
+ });
 /*If user ignores the zipcode input pop up modal to remind them to add zipcode. Function called if adding information in the 
 
 
 */
 
   
-// Get the modal
-var modal = document.getElementById('myModal');
+// // Get the modal
+// var modal = document.getElementById('myModal');
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+// // Get the button that opens the modal
+// var btn = document.getElementById("myBtn");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+// // Get the <span> element that closes the modal
+// var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
-}
+// // When the user clicks the button, open the modal 
+// btn.onclick = function() {
+//   modal.style.display = "block";
+// }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
+// // When the user clicks on <span> (x), close the modal
+// span.onclick = function() {
+//   modal.style.display = "none";
+// }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+// // When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+  // }
+// }
