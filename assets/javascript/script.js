@@ -23,9 +23,9 @@ var amazonItemResult = "";
 var lowestPrice = "";
 var resultItems = [
   {
-  item: [],
-  store:[],
-  price: [],
+  item: "",
+  store:"",
+  price: "",
   }];
 
   
@@ -82,9 +82,7 @@ var bestBuyInStoreURL = {
   console.log(bestBuyitemURL.keyword);
  };
 
- /*Takes the last items searched and creates "&search=" for every empty character in the users item search
-  * returns the @param bestBuySearch item that is used to build the best buy URL
-  */
+ 
 
   //Find Best Buy Items in stock based on customers location
   function BBlocalUserItem(){
@@ -96,7 +94,7 @@ var bestBuyInStoreURL = {
     bestBuyInStoreURL.show +
     bestBuyInStoreURL.responseFormat
     console.log(queryURL);
-    // Performing our AJAX GET request
+  
     $.ajax({
       url: queryURL,
       method: "GET"
@@ -104,9 +102,17 @@ var bestBuyInStoreURL = {
       .then(function(response) {
         console.log(response);
         var results = response.stores[0].products;
-       
+        console.log(response.stores[0].products[0].name)
         console.log(results);
-   
+        for(i = 0; i < results.length; i++){
+        resultItems.item = results[i].name;
+        resultItems.store = "Best Buy";
+        resultItems.price = results[i].salePrice;
+        
+        bestbuyItemResult.push(resultItems);  
+        }
+        console.log(resultItems);
+        console.log(bestbuyItemResult);
     });
     console.log(bestBuyItemSKU)
     };
@@ -147,7 +153,7 @@ var bestBuyInStoreURL = {
         //console.log(results.length);
         for(i = 0; i < results.length; i++ ){
           bestBuyItemSKU += results[i].sku + ",";
-          
+          resultItems.item
         }
        
         console.log(results[0]);
