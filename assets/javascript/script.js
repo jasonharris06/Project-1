@@ -18,15 +18,15 @@ var itemArray = [""];
 var macyItemResult = "";
 var bestbuyItemResult = [];
 var bestBuySearch = "";
-var bestBuyItemSKU = "4790684"
+var bestBuyItemSKU = ""
 var amazonItemResult = "";
 var lowestPrice = "";
-var resultItems = 
+var resultItems = [
   {
-  item: "",
-  store: "",
-  price: "",
-  }
+  item: [],
+  store:[],
+  price: [],
+  }];
 
   
   
@@ -46,10 +46,10 @@ var bestBuyitemURL = {
 
 //Best Buy Store Search URL that searches for items in the users chosen area
 var bestBuyInStoreURL = {
-  baseURL: "http://api.bestbuy.com/v1/stores",
+  baseURL: "https://api.bestbuy.com/v1/stores",
   areaFunction: "((area(" + userLocationInfo.zip + ",25)))",
   apiKey: "?apiKey=5jj3YuGF43lg9OFLbNcrxS4w",
-  inStoreAvailability: "+products(sku%20in%20(" + bestBuyItemSKU + "))",
+  inStoreAvailability: "+products(sku%20in%20(", //+ bestBuyItemSKU + "))",
   show: "&show=products.sku,products.name,products.shortDescription,products.salePrice,products.regularPrice,products.addToCartURL,products.url,products.image,products.customerReviewCount,products.customerReviewAverage,city,country,location,fullPostalCode,services,region",
   responseFormat: "&format=json"
 }
@@ -82,6 +82,36 @@ var bestBuyInStoreURL = {
   console.log(bestBuyitemURL.keyword);
  };
 
+ /*Takes the last items searched and creates "&search=" for every empty character in the users item search
+  * returns the @param bestBuySearch item that is used to build the best buy URL
+  */
+
+  //Find Best Buy Items in stock based on customers location
+  function BBlocalUserItem(){
+    queryURL =
+    bestBuyInStoreURL.baseURL +
+    bestBuyInStoreURL.areaFunction +
+    bestBuyInStoreURL.inStoreAvailability + bestBuyItemSKU + "))" +
+    bestBuyInStoreURL.apiKey +
+    bestBuyInStoreURL.show +
+    bestBuyInStoreURL.responseFormat
+    console.log(queryURL);
+    // Performing our AJAX GET request
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    })
+      .then(function(response) {
+        console.log(response);
+        var results = response.stores[0].products;
+       
+        console.log(results);
+   
+    });
+    console.log(bestBuyItemSKU)
+    };
+
+
 //onclick function that captures the users results and passes them through them
 // through bestBuyKeywordcfig
 
@@ -110,72 +140,28 @@ var bestBuyInStoreURL = {
       url: queryURL,
       method: "GET"
     })
-      // After the data comes back from the API
      .then(function(response) {
-        // Storing an array of results in the results variable
+    
         var results = response.products;
         bestBuyItemSKU = "";
         //console.log(results.length);
         for(i = 0; i < results.length; i++ ){
           bestBuyItemSKU += results[i].sku + ",";
-          BestBuyItems();
+          
         }
-        BestBuyItems();
+       
         console.log(results[0]);
         console.log(bestBuyItemSKU);
         
     });
-    
-    // //Find Best Buy Items in stock based on customers location
-    // queryURL =
-    // bestBuyInStoreURL.baseURL +
-    // bestBuyInStoreURL.areaFunction +
-    // bestBuyInStoreURL.inStoreAvailability +
-    // bestBuyInStoreURL.apiKey +
-    // bestBuyInStoreURL.show +
-    // bestBuyInStoreURL.responseFormat
 
-    // console.log(queryURL);
-    // // Performing our AJAX GET request
-    // $.ajax({
-    //   url: queryURL,
-    //   method: "GET"
-    // })
-    //   // After the data comes back from the API
-    //   .then(function(response) {
-    //     // Storing an array of results in the results variable
-    //     var results = response.products;
-       
-    //     console.log(results);
+    //Waits until the SKU numbers get pulled from the Users Search
+    setTimeout(function(){ BBlocalUserItem();}, 1000);
 
-    // });
  });
  console.log(bestBuyItemSKU)
- function BestBuyItems(){
- //Find Best Buy Items in stock based on customers location
- queryURL =
- bestBuyInStoreURL.baseURL +
- bestBuyInStoreURL.areaFunction +
- bestBuyInStoreURL.inStoreAvailability +
- bestBuyInStoreURL.apiKey +
- bestBuyInStoreURL.show +
- bestBuyInStoreURL.responseFormat
-
- console.log(queryURL);
- // Performing our AJAX GET request
- $.ajax({
-   url: queryURL,
-   method: "GET"
- })
-   // After the data comes back from the API
-   .then(function(response) {
-     // Storing an array of results in the results variable
-     var results = response.products;
-    
-     console.log(results);
-
- });
- };
+ 
+ 
 
  $("#zip-code-btn").on("click", function(event){
   event.preventDefault();
