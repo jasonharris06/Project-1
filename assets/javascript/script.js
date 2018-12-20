@@ -21,12 +21,12 @@ var bestBuySearch = "";
 var bestBuyItemSKU = ""
 var amazonItemResult = "";
 var lowestPrice = "";
-var resultItems = [
+var resultItems = 
   {
   item: "",
   store:"",
   price: "",
-  }];
+  };
 
   
   
@@ -106,11 +106,13 @@ var bestBuyInStoreURL = {
         console.log(results);
         for(i = 0; i < results.length; i++){
         resultItems.item = results[i].name;
+        console.log("script.js - 109", results[i].name, resultItems.item);
         resultItems.store = "Best Buy";
         resultItems.price = results[i].salePrice;
-        
+        console.log("script.js-112",bestbuyItemResult);
         bestbuyItemResult.push(resultItems);  
-        }
+        console.log("script.js-114",bestbuyItemResult);
+        };
         console.log(resultItems);
         console.log(bestbuyItemResult);
     });
@@ -158,11 +160,11 @@ var bestBuyInStoreURL = {
        
         console.log(results[0]);
         console.log(bestBuyItemSKU);
-        
+        BBlocalUserItem();
     });
 
     //Waits until the SKU numbers get pulled from the Users Search
-    setTimeout(function(){ BBlocalUserItem();}, 1000);
+    //setTimeout(function(){ BBlocalUserItem();}, 1000);
 
  });
  console.log(bestBuyItemSKU)
